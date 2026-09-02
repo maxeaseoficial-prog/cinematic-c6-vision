@@ -1,24 +1,50 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
+import { AppEcosystem } from "@/components/landing/AppEcosystem";
+import { C6Ecosystem } from "@/components/landing/C6Ecosystem";
+import { Carbon } from "@/components/landing/Carbon";
+import { FinalCTA } from "@/components/landing/FinalCTA";
+import { Footer } from "@/components/landing/Footer";
+import { GlobalAccount } from "@/components/landing/GlobalAccount";
+import { Header } from "@/components/landing/Header";
+import { Hero } from "@/components/landing/Hero";
+import { Products } from "@/components/landing/Products";
+import { useRevealObserver } from "@/lib/motion";
+
+const title = "C6 Bank Concept — Uma experiência financeira extraordinária";
+const description =
+  "Concept visual de landing page para o C6 Bank: conta, cartões, C6 Carbon, Conta Global e investimentos em uma direção de arte editorial.";
+
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title },
+      { name: "description", content: description },
+      { property: "og:title", content: title },
+      { property: "og:description", content: description },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
+  useRevealObserver();
+
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div className="bg-paper">
+      <Header />
+      <main>
+        <Hero />
+        <Products />
+        <Carbon />
+        <AppEcosystem />
+        <GlobalAccount />
+        <C6Ecosystem />
+        <FinalCTA />
+      </main>
+      <Footer />
     </div>
   );
 }
