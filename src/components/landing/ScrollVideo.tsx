@@ -91,7 +91,7 @@ export function ScrollVideo() {
               playsInline
               preload="auto"
               disablePictureInPicture
-              className="mx-auto w-full max-w-[1200px]"
+              className="mx-auto w-full max-w-[1200px] [mask-image:radial-gradient(78%_80%_at_50%_50%,black_62%,transparent_100%)]"
             >
               <source src={videoAsset.url} type="video/mp4" />
               <source src={videoWebm.url} type="video/webm" />
