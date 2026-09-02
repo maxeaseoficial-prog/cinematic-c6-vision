@@ -13,7 +13,7 @@ export function useRevealObserver() {
       (entries) => {
         for (const e of entries) {
           if (e.isIntersecting) {
-            (e.target as HTMLElement).dataset.reveal = "in";
+            (e.target as HTMLElement).dataset["reveal"] = "in";
             io.unobserve(e.target);
           }
         }
