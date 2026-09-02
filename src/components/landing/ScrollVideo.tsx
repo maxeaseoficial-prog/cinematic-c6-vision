@@ -24,22 +24,17 @@ export function ScrollVideo() {
     let frame = 0;
     let target = 0;
     let current = 0;
-    let duration = 0;
     let running = false;
 
-    const readDuration = () => {
-      duration = Number.isFinite(video.duration) ? video.duration : 0;
-    };
-    readDuration();
-    video.addEventListener("loadedmetadata", readDuration);
-
     const tick = () => {
+      const duration = Number.isFinite(video.duration) ? video.duration : 0;
       // smooth easing towards the scroll target so the scrub feels cinematic
       current += (target - current) * 0.18;
       if (duration > 0) {
         const time = Math.min(Math.max(current * duration, 0), duration - 0.02);
         if (Math.abs(video.currentTime - time) > 0.005) video.currentTime = time;
       }
+
       if (Math.abs(target - current) > 0.0005) {
         frame = requestAnimationFrame(tick);
       } else {
