@@ -1,6 +1,8 @@
 import { useEffect, useRef } from "react";
 
 import videoAsset from "@/assets/animacao-celulares.mp4.asset.json";
+import videoWebm from "@/assets/animacao-celulares.webm.asset.json";
+
 import { Shell } from "./ui";
 
 /**
