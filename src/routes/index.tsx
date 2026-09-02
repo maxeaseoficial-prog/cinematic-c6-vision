@@ -9,6 +9,8 @@ import { GlobalAccount } from "@/components/landing/GlobalAccount";
 import { Header } from "@/components/landing/Header";
 import { Hero } from "@/components/landing/Hero";
 import { Products } from "@/components/landing/Products";
+import { ScrollVideo } from "@/components/landing/ScrollVideo";
+
 import { useRevealObserver } from "@/lib/motion";
 
 const title = "C6 Bank Concept — Uma experiência financeira extraordinária";
@@ -37,7 +39,9 @@ function Index() {
       <Header />
       <main>
         <Hero />
+        <ScrollVideo />
         <Products />
+
         <Carbon />
         <AppEcosystem />
         <GlobalAccount />
