@@ -1,51 +1,6 @@
-import cardCarbon from "@/assets/card-carbon.webp.asset.json";
-import cardBlack from "@/assets/card-black.webp.asset.json";
-import cardGraphene from "@/assets/card-graphene.webp.asset.json";
 import { useParallax } from "@/lib/motion";
 import { Cta, Shell } from "./ui";
 
-function HeroCards() {
-  const stack = useParallax<HTMLDivElement>({ y: 70, rotate: -1.4 });
-
-  return (
-    <div
-      ref={stack}
-      className="relative mx-auto aspect-[4/3.4] w-full max-w-[560px] lg:max-w-none"
-      style={{ perspective: "1400px" }}
-      aria-hidden="false"
-    >
-      {/* localized blue lighting behind the products */}
-      <div
-        aria-hidden="true"
-        className="absolute left-1/2 top-1/2 h-[70%] w-[85%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue/25 blur-[110px]"
-      />
-      <img
-        src={cardGraphene.url}
-        width={816}
-        height={1050}
-        alt="Cartão C6 Graphene"
-        className="absolute left-[2%] top-[16%] w-[42%] origin-bottom -rotate-[13deg] opacity-95 drop-shadow-[0_40px_60px_rgba(0,0,0,0.65)] motion-safe:animate-[fade-in_1.1s_cubic-bezier(0.22,1,0.36,1)_0.45s_both]"
-        style={{ transform: "rotate(-13deg) translateZ(-60px)" }}
-      />
-      <img
-        src={cardBlack.url}
-        width={816}
-        height={1050}
-        alt="Cartão C6 Mastercard Black"
-        className="absolute right-[3%] top-[10%] w-[45%] rotate-[11deg] drop-shadow-[0_50px_70px_rgba(0,0,0,0.7)] motion-safe:animate-[fade-in_1.1s_cubic-bezier(0.22,1,0.36,1)_0.6s_both]"
-        style={{ transform: "rotate(11deg) translateZ(-30px)" }}
-      />
-      <img
-        src={cardCarbon.url}
-        width={816}
-        height={1050}
-        alt="Cartão C6 Carbon"
-        fetchPriority="high"
-        className="absolute left-1/2 top-[24%] w-[52%] -translate-x-1/2 drop-shadow-[0_70px_90px_rgba(0,0,0,0.8)] motion-safe:animate-[fade-in_1.2s_cubic-bezier(0.22,1,0.36,1)_0.75s_both]"
-      />
-    </div>
-  );
-}
 
 export function Hero() {
   const bgWord = useParallax<HTMLSpanElement>({ y: 130 });
