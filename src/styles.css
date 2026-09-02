@@ -109,7 +109,7 @@
 
 /* Editorial type scale */
 @utility display-xl {
-  font-size: clamp(2.6rem, 8.2vw, 8rem);
+  font-size: clamp(2.6rem, 6.6vw, 6.4rem);
   font-weight: 500;
 }
 
