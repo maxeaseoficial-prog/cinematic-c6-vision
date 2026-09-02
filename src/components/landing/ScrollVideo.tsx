@@ -90,13 +90,16 @@ export function ScrollVideo() {
           <div className="relative">
             <video
               ref={videoRef}
-              src={videoAsset.url}
               muted
               playsInline
               preload="auto"
               disablePictureInPicture
               className="mx-auto w-full max-w-[1200px]"
-            />
+            >
+              <source src={videoAsset.url} type="video/mp4" />
+              <source src={videoWebm.url} type="video/webm" />
+            </video>
+
             <p className="mt-8 text-center text-sm tracking-[0.18em] text-muted-on-dark uppercase">
               Role para explorar o app
             </p>
