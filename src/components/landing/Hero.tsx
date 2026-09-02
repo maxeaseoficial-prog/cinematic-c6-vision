@@ -29,33 +29,30 @@ export function Hero() {
       </span>
 
       <Shell>
-        <div className="grid items-end gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-8">
-          <div>
-            <p className="eyebrow text-blue-soft motion-safe:animate-[fade-in_0.9s_ease-out_both]">
-              Concept · Redesign
-            </p>
-            <h1 className="display-xl mt-6 motion-safe:animate-[fade-in_1s_cubic-bezier(0.22,1,0.36,1)_0.1s_both]">
-              Uma experiência
-              <br />
-              financeira
-              <br />
-              <span className="text-muted-on-dark">extraordinária.</span>
-            </h1>
-            <p className="body-lg mt-8 text-muted-on-dark motion-safe:animate-[fade-in_1s_cubic-bezier(0.22,1,0.36,1)_0.3s_both]">
-              Conta, cartões, investimentos e muito mais em uma experiência feita para acompanhar
-              você.
-            </p>
-            <div className="mt-10 flex flex-wrap items-center gap-3 motion-safe:animate-[fade-in_1s_cubic-bezier(0.22,1,0.36,1)_0.45s_both]">
-              <Cta href="#abrir-conta">Abra sua conta</Cta>
-              <Cta href="#produtos" variant="outline">
-                Explore o C6
-              </Cta>
-            </div>
+        <div className="max-w-[16ch] lg:max-w-none">
+          <p className="eyebrow text-blue-soft motion-safe:animate-[fade-in_0.9s_ease-out_both]">
+            Concept · Redesign
+          </p>
+          <h1 className="display-xl mt-6 motion-safe:animate-[fade-in_1s_cubic-bezier(0.22,1,0.36,1)_0.1s_both]">
+            Uma experiência
+            <br />
+            financeira
+            <br />
+            <span className="text-muted-on-dark">extraordinária.</span>
+          </h1>
+          <p className="body-lg mt-8 max-w-[46ch] text-muted-on-dark motion-safe:animate-[fade-in_1s_cubic-bezier(0.22,1,0.36,1)_0.3s_both]">
+            Conta, cartões, investimentos e muito mais em uma experiência feita para acompanhar
+            você.
+          </p>
+          <div className="mt-10 flex flex-wrap items-center gap-3 motion-safe:animate-[fade-in_1s_cubic-bezier(0.22,1,0.36,1)_0.45s_both]">
+            <Cta href="#abrir-conta">Abra sua conta</Cta>
+            <Cta href="#produtos" variant="outline">
+              Explore o C6
+            </Cta>
           </div>
-
-          <HeroCards />
         </div>
       </Shell>
+
     </section>
   );
 }
