@@ -60,7 +60,7 @@ export function GlobalAccount() {
               width={551}
               height={450}
               loading="lazy"
-              className="absolute -bottom-8 left-2 w-[44%] max-w-[300px] drop-shadow-[0_30px_50px_rgba(0,0,0,0.35)] sm:-bottom-12 sm:left-6"
+              className="absolute -bottom-8 left-2 w-[44%] max-w-[300px] rounded-xl ring-1 ring-line-dark drop-shadow-[0_30px_50px_rgba(0,0,0,0.35)] sm:-bottom-12 sm:left-6"
             />
           </div>
         </div>

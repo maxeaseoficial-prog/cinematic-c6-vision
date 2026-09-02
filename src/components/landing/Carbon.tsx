@@ -24,7 +24,7 @@ export function Carbon() {
       />
       <Shell>
         <div className="grid items-center gap-12 py-24 md:py-36 lg:grid-cols-2 lg:gap-6 xl:py-44">
-          <div className="relative order-2 lg:order-1 lg:-ml-[8%] lg:w-[116%]">
+          <div className="relative order-2 lg:order-1">
             <img
               ref={card}
               src={carbonHero.url}
@@ -32,9 +32,10 @@ export function Carbon() {
               width={1950}
               height={1800}
               loading="lazy"
-              className="w-full will-change-transform"
+              className="w-full will-change-transform [mask-image:radial-gradient(80%_78%_at_50%_50%,black_58%,transparent_100%)]"
             />
           </div>
+
 
           <div className="order-1 lg:order-2 lg:pl-6 xl:pl-16">
             <Eyebrow>C6 Carbon</Eyebrow>

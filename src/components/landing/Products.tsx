@@ -1,5 +1,5 @@
 import lifestyle from "@/assets/lifestyle-home.webp.asset.json";
-import carbonFront from "@/assets/card-carbon-front.webp.asset.json";
+import carbonFront from "@/assets/card-carbon.webp.asset.json";
 import globalSkier from "@/assets/global-skier.webp.asset.json";
 import { ArrowBadge, Shell } from "./ui";
 import { cn } from "@/lib/utils";
@@ -53,11 +53,7 @@ const PANELS: Panel[] = [
 export function Products() {
   return (
     <section id="produtos" className="relative bg-paper py-24 md:py-36 xl:py-44">
-      {/* elegant transition out of the dark hero */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 -top-px h-32 bg-gradient-to-b from-ink/95 to-transparent"
-      />
+
       <Shell>
         <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
           <h2 className="display-lg" data-reveal>

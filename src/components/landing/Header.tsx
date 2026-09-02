@@ -34,8 +34,9 @@ export function Header() {
       className={cn(
         "fixed inset-x-0 top-0 z-50 transition-[background-color,backdrop-filter,border-color] duration-500",
         scrolled
-          ? "border-b border-line-dark bg-ink/75 backdrop-blur-md"
+          ? "border-b border-line-dark bg-ink/95 backdrop-blur-xl"
           : "border-b border-transparent",
+
       )}
     >
       <Shell>
