@@ -56,12 +56,14 @@ export function ScrollVideo() {
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
+    video.addEventListener("loadedmetadata", onScroll);
     return () => {
       cancelAnimationFrame(frame);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
-      video.removeEventListener("loadedmetadata", readDuration);
+      video.removeEventListener("loadedmetadata", onScroll);
     };
+
   }, []);
 
   return (
