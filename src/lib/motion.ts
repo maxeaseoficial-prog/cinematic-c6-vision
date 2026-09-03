@@ -1,13 +1,12 @@
 import { useEffect, useRef } from "react";
 
-const prefersReduced = () =>
-  typeof window !== "undefined" &&
-  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+export const prefersReducedMotion = () =>
+  typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 /** Reveals every [data-reveal] node once it enters the viewport. One observer for the page. */
 export function useRevealObserver() {
   useEffect(() => {
-    if (prefersReduced()) return;
+    if (prefersReducedMotion()) return;
     const nodes = Array.from(document.querySelectorAll<HTMLElement>("[data-reveal]"));
     const io = new IntersectionObserver(
       (entries) => {
@@ -48,7 +47,7 @@ function onScroll() {
   });
 }
 
-function subscribe(fn: () => void) {
+export function subscribeToMotionFrame(fn: () => void) {
   subscribers.add(fn);
   if (!bound) {
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -58,6 +57,11 @@ function subscribe(fn: () => void) {
   fn();
   return () => {
     subscribers.delete(fn);
+    if (subscribers.size === 0 && bound) {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      bound = false;
+    }
   };
 }
 
@@ -72,7 +76,7 @@ export function useParallax<T extends HTMLElement>({
 
   useEffect(() => {
     const el = ref.current;
-    if (!el || prefersReduced()) return;
+    if (!el || prefersReducedMotion()) return;
     if (window.innerWidth < minWidth) return;
 
     const update = () => {
@@ -83,7 +87,7 @@ export function useParallax<T extends HTMLElement>({
       el.style.transform = `translate3d(0, ${(-p * y).toFixed(2)}px, 0) rotate(${(p * rotate).toFixed(3)}deg) scale(${(1 + p * scale).toFixed(4)})`;
     };
 
-    return subscribe(update);
+    return subscribeToMotionFrame(update);
   }, [y, rotate, scale, minWidth]);
 
   return ref;

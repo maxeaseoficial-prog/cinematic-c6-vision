@@ -1,9 +1,14 @@
 import { useEffect, useRef } from "react";
 
-import videoAsset from "@/assets/animacao-celulares.mp4.asset.json";
-import videoWebm from "@/assets/animacao-celulares.webm.asset.json";
+import { prefersReducedMotion, subscribeToMotionFrame } from "@/lib/motion";
 
-import { Shell } from "./ui";
+const VIDEO_SOURCES = {
+  webm: "/media/c6-app-scroll.webm",
+  mp4: "/media/c6-app-scroll.mp4",
+  poster: "/media/c6-app-scroll-poster.jpg",
+} as const;
+
+const clamp = (value: number, min = 0, max = 1) => Math.min(Math.max(value, min), max);
 
 /**
  * Scroll-scrubbed video: scrolling down advances the timeline,
@@ -13,95 +18,121 @@ import { Shell } from "./ui";
 export function ScrollVideo() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const objectRef = useRef<HTMLDivElement>(null);
+  const paperRef = useRef<HTMLDivElement>(null);
+  const accentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const section = sectionRef.current;
     const video = videoRef.current;
-    if (!section || !video) return;
+    const object = objectRef.current;
+    const paper = paperRef.current;
+    const accent = accentRef.current;
+    if (!section || !video || !object || !paper || !accent) return;
 
     video.pause();
 
-    let frame = 0;
-    let target = 0;
-    let current = 0;
-    let running = false;
+    const reducedMotion = prefersReducedMotion();
 
-    const tick = () => {
-      const duration = Number.isFinite(video.duration) ? video.duration : 0;
-      // smooth easing towards the scroll target so the scrub feels cinematic
-      current += (target - current) * 0.18;
-      if (duration > 0) {
-        const time = Math.min(Math.max(current * duration, 0), duration - 0.02);
-        if (Math.abs(video.currentTime - time) > 0.005) video.currentTime = time;
-      }
-
-      if (Math.abs(target - current) > 0.0005) {
-        frame = requestAnimationFrame(tick);
-      } else {
-        running = false;
-      }
-    };
-
-    const onScroll = () => {
+    const update = () => {
       const rect = section.getBoundingClientRect();
       const scrollable = rect.height - window.innerHeight;
-      const progress = scrollable > 0 ? -rect.top / scrollable : 0;
-      target = Math.min(Math.max(progress, 0), 1);
-      if (!running) {
-        running = true;
-        frame = requestAnimationFrame(tick);
+      const progress = clamp(scrollable > 0 ? -rect.top / scrollable : 0);
+
+      const entrance = reducedMotion ? 1 : clamp(progress / 0.1);
+      const paperReveal = reducedMotion ? 0 : clamp((progress - 0.78) / 0.22);
+      const objectExit = reducedMotion ? 0 : clamp((progress - 0.86) / 0.14);
+
+      object.style.opacity = `${0.24 + entrance * 0.76 - objectExit * 0.5}`;
+      object.style.transform = `translate3d(0, ${(1 - entrance) * 7 - objectExit * 4}svh, 0) scale(${(0.94 + entrance * 0.06 - objectExit * 0.035).toFixed(4)})`;
+      paper.style.transform = `translate3d(0, ${((1 - paperReveal) * 102).toFixed(3)}%, 0)`;
+      accent.style.transform = `scaleX(${(0.25 + progress * 0.75).toFixed(4)})`;
+
+      const duration = video.readyState >= HTMLMediaElement.HAVE_METADATA ? video.duration : 0;
+      if (!reducedMotion && Number.isFinite(duration) && duration > 0) {
+        const finalFrameTime = Math.max(0, duration - 0.001);
+        const targetTime = progress * finalFrameTime;
+        if (Math.abs(video.currentTime - targetTime) > 1 / 240) {
+          video.currentTime = targetTime;
+        }
+      } else if (reducedMotion && video.readyState >= HTMLMediaElement.HAVE_METADATA) {
+        video.currentTime = 0;
       }
     };
 
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    video.addEventListener("loadedmetadata", onScroll);
-    return () => {
-      cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-      video.removeEventListener("loadedmetadata", onScroll);
-    };
+    const keepPaused = () => video.pause();
+    const unsubscribe = subscribeToMotionFrame(update);
+    video.addEventListener("loadedmetadata", update);
+    video.addEventListener("durationchange", update);
+    video.addEventListener("play", keepPaused);
 
+    return () => {
+      unsubscribe();
+      video.removeEventListener("loadedmetadata", update);
+      video.removeEventListener("durationchange", update);
+      video.removeEventListener("play", keepPaused);
+    };
   }, []);
 
   return (
     <section
       id="app"
       ref={sectionRef}
-      className="relative bg-ink text-paper"
-      style={{ height: "260vh" }}
+      className="scroll-video-scene relative -mt-px bg-ink text-paper"
       aria-label="Animação do app C6 Bank"
     >
-      <div className="sticky top-0 flex h-screen items-center overflow-hidden">
+      <div className="sticky top-0 h-svh overflow-hidden">
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0"
           style={{
             background:
-              "radial-gradient(70% 60% at 50% 45%, oklch(0.62 0.165 253 / 0.14), transparent 65%), linear-gradient(180deg, oklch(0.13 0.004 265), oklch(0.145 0.004 265))",
+              "radial-gradient(58% 68% at 64% 42%, oklch(0.53 0.12 253 / 0.11), transparent 70%), linear-gradient(180deg, oklch(0.105 0.004 265), oklch(0.13 0.004 265) 68%, oklch(0.15 0.004 265))",
           }}
         />
-        <Shell>
-          <div className="relative">
+
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute left-[7vw] top-[18svh] hidden h-[50svh] w-px bg-gradient-to-b from-transparent via-line-dark to-transparent lg:block"
+        />
+        <div
+          ref={accentRef}
+          aria-hidden="true"
+          className="pointer-events-none absolute left-[7vw] top-[18svh] hidden h-px w-[18vw] origin-left bg-blue/70 lg:block"
+        />
+
+        <div
+          ref={objectRef}
+          className="absolute inset-0 flex items-center justify-center will-change-[transform,opacity]"
+        >
+          <div className="relative -translate-x-[8vw] sm:translate-x-0">
             <video
               ref={videoRef}
               muted
               playsInline
               preload="auto"
+              poster={VIDEO_SOURCES.poster}
+              controls={false}
               disablePictureInPicture
-              className="mx-auto w-full max-w-[1200px] [mask-image:radial-gradient(78%_80%_at_50%_50%,black_62%,transparent_100%)]"
+              disableRemotePlayback
+              aria-hidden="true"
+              tabIndex={-1}
+              className="block w-[180vw] max-w-[112rem] bg-transparent object-contain sm:w-[145vw] lg:w-[112vw]"
             >
-              <source src={videoAsset.url} type="video/mp4" />
-              <source src={videoWebm.url} type="video/webm" />
+              <source src={VIDEO_SOURCES.webm} type="video/webm" />
+              <source src={VIDEO_SOURCES.mp4} type="video/mp4" />
             </video>
-
-            <p className="mt-8 text-center text-sm tracking-[0.18em] text-muted-on-dark uppercase">
-              Role para explorar o app
-            </p>
           </div>
-        </Shell>
+        </div>
+
+        <div
+          ref={paperRef}
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-[34svh] translate-y-full bg-paper will-change-transform"
+        >
+          <div className="absolute inset-x-0 top-0 h-px bg-ink/10" />
+          <div className="absolute left-[7vw] top-0 h-px w-[18vw] bg-blue" />
+        </div>
       </div>
     </section>
   );
